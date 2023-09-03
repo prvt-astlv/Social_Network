@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+<style>@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+body { background-color: #b4deac; margin: 0; font-family: 'Roboto Condensed', sans-serif;}
+main {
+  width: 100vw;
+  height: 100vh;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.card{
+  width: 400px;
+  background-color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.14);
+  -moz-box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.14);
+  box-shadow: 10px 10px 23px 0px rgba(0,0,0,0.14);
+  margin: auto;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  height: 360px;
+  display: inline-block;
+  transform: scale(.9);
+  transition: all .3s;
+}
+
+.card:hover{
+  transform: scale(.95);
+}
+
+.card-top {
+  width: 100%;
+  height: 270px;
+  background-color: #f1f1f1;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.card-top > img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: 100%;
+  height: 100%;
+}
+.card-mid {
+  padding: 20px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50px;
+  background-color: white;
+  border-bottom-left-radius: 10px;
+  overflow:hidden;
+  border-bottom-right-radius: 10px;
+  transition: all .3s;
+}
+.card-mid h4{
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.card-mid label{
+  margin: 0;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: grey;
+}
+.card-image{
+  transition: all .3s;
+}
+.card:hover .card-image {
+  -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%);
+}
+.card-desc {
+  transition: all .3s .2s;
+  border-left: 0px solid #b4deac;
+}
+.card:hover .card-desc {
+  border-left: 2px solid #b4deac;
+  padding-left: 8px;
+}
+.card-blur-zone {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 15px;
+  background-color: rgba(255, 255, 255, .8);
+
+}
+</style>
+</body>
+{% block content %}
+
+<a target="_blank" style="display: block; position: fixed; bottom: 10px; right: 10px; width: 60px;" href="http://www.yoannbraie.fr/board/"><img style="width: 100%;" src="http://images.yoannbraie.fr/logoyb.png" alt="logo"/></a>
+<main id="main">
+{% for objects in posts %}
+{% for post in objects %}
+  <div class="card" id="card1">
+    <div class="card-top"><img class="card-image" alt="" src="{{post.image.url}}" /></div>
+    <div class="card-mid">
+      <h4 class="card-title"></h4>
+      <label class="card-desc">{{post.description}}</label>
+      <div class="card-blur-zone"></div>
+    </div>
+  </div>
+{% endfor %}
+{% endfor %}
+</main>
+{% endblock %}
+<script>class YBCard {
+
+  constructor(id, title, description, image) {
+    this.idCard = id
+    this.titre = title
+    this.description = description
+    this.image = image
+  }
+
+  initCard() {
+    this.updateDom();
+    this.activateListeners();
+  }
+
+  updateDom() {
+    var cardDom = document.getElementById(this.idCard)
+    if(cardDom.hasChildNodes()){
+      var cardDomImage = cardDom.getElementsByClassName('card-image')[0]
+      cardDomImage.src = this.image;
+
+      var cardDomTitle = cardDom.getElementsByClassName('card-title')[0]
+      cardDomTitle.innerHTML = this.titre;
+
+      var cardDomDesc = cardDom.getElementsByClassName('card-desc')[0]
+      cardDomDesc.innerHTML = this.description;
+    }
+  }
+
+  activateListeners() {
+    var cardDom = document.getElementById(this.idCard)
+    cardDom.addEventListener("mouseover", function( event ) {
+      var cardDomTitle = cardDom.getElementsByClassName('card-title')[0]
+      var cardDomDesc = cardDom.getElementsByClassName('card-desc')[0]
+      var cardDomMiddle = cardDom.getElementsByClassName('card-mid')[0]
+      var cardMiddleHeight = cardDomTitle.offsetHeight + cardDomDesc.offsetHeight;
+      cardDomMiddle.style.height = cardMiddleHeight + 15 + "px";
+    }, false);
+
+    cardDom.addEventListener("mouseout", function( event ) {
+      var cardDomMiddle = cardDom.getElementsByClassName('card-mid')[0]
+      cardDomMiddle.style.height = 50 + "px";
+    }, false);
+  }
+}
+
+var card1 = new YBCard("card1", "Title card 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br/><br/> Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.<br/><br/> Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", "https://images.unsplash.com/photo-1557891393-1aebdf651bbd?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9")
+card1.initCard();
+
+var card2 = new YBCard("card2", "Title card 2", "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.<br/><br/> totam rem aperiam, eaque ipsa quae ab illo inventore.", "https://images.unsplash.com/photo-1558118385-34a216752d40?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9");
+card2.initCard();
+
+var card3 = new YBCard("card3", "Title card 3", "Unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.<br/><br/> totam rem aperiam, eaque ipsa quae ab illo inventore.<br/>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.", "https://images.unsplash.com/photo-1557821055-a3915cdd5432?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9");
+card3.initCard();
+</script>
+</html>
